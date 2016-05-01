@@ -3,6 +3,8 @@ package com.example.dapid.bimbelku;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,8 +23,10 @@ public class RecommendFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_notif, container, false);
-        recyclerView = (RecyclerView) container.findViewById(R.id.recyclerView);
+        View v = inflater.inflate(R.layout.fragment_recommend, container, false);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Rekomendasi");
+
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(false);
 
         layoutManager = new LinearLayoutManager(this.getActivity());
