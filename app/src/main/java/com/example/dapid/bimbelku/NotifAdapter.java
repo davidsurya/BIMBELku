@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,23 +15,19 @@ import java.util.List;
 /**
  * Created by dapid on 29/04/16.
  */
-public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
+public class NotifAdapter extends RecyclerView.Adapter<NotifAdapter.ViewHolder>{
 
-    List <ListItem> items;
+    List <ListNotif> items;
     Context context;
+    private final String detail = "Ingin menambahkan Anda sebagai tentornya.";
 
-    public CardAdapter(Bitmap[] images, String [] nama, String [] email, String [] alamat, String [] keahlian, String [] tingkat, String [] rating) {
+    public NotifAdapter(Bitmap[] images, String [] nama) {
         super();
-        items = new ArrayList<ListItem>();
+        items = new ArrayList<ListNotif>();
         for (int i = 0; i < nama.length; i++) {
-            ListItem item = new ListItem();
+            ListNotif item = new ListNotif();
             item.setImage(images[i]);
             item.setNama(nama[i]);
-            item.setEmail(email[i]);
-            item.setAlamat(alamat[i]);
-            item.setKeahlian(keahlian[i]);
-            item.setTingkat(tingkat[i]);
-            item.setRating(rating[i]);
             items.add(item);
         }
     }
@@ -47,11 +42,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ListItem list = items.get(position);
+        ListNotif list = items.get(position);
         holder.imageView.setImageBitmap(list.getImage());
         holder.txtNama.setText(list.getNama());
-        holder.txtKeahlian.setText(list.getKeahlian());
-        holder.txtRating.setText(list.getRating());
+        holder.txtDetail.setText(this.detail);
         holder.currentItem = items.get(position);
     }
 
@@ -63,29 +57,24 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
     public class ViewHolder extends RecyclerView.ViewHolder{
         public ImageView imageView;
         public TextView txtNama;
-        public TextView txtKeahlian;
-        public TextView txtRating;
-        public Button btnTerima;
-        public Button btnTolak;
-
-        public ListItem currentItem;
+        public TextView txtDetail;
+        public TextView txtRate;
+        public ListNotif currentItem;
 
         public ViewHolder(final View itemView) {
             super(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Tentor) itemView.getContext()).openFragment(currentItem);
+
                 }
             });
             imageView = (ImageView) itemView.findViewById(R.id.img);
             txtNama = (TextView) itemView.findViewById(R.id.txtName);
-            txtKeahlian = (TextView) itemView.findViewById(R.id.txtLes);
-            txtRating = (TextView) itemView.findViewById(R.id.rate);
-            btnTerima = (Button) itemView.findViewById(R.id.btnTerima);
-            btnTolak = (Button) itemView.findViewById(R.id.btnTolak);
-            btnTerima.setVisibility(View.INVISIBLE);
-            btnTolak.setVisibility(View.INVISIBLE);
+            txtDetail = (TextView) itemView.findViewById(R.id.txtLes);
+            txtRate = (TextView) itemView.findViewById(R.id.rate);
+            txtRate.setEnabled(false);
+            txtRate.setVisibility(View.INVISIBLE);
         }
     }
 }
