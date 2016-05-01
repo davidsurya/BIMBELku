@@ -31,10 +31,17 @@ public class Tentor extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tentor);
+
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("BIMBELku");
 
+        RecommendFragment rekomendasi = new RecommendFragment();
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame, rekomendasi);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -43,18 +50,33 @@ public class Tentor extends AppCompatActivity {
                 else item.setChecked(true);
                 drawer.closeDrawers();
                 switch (item.getItemId()){
-                    case R.id.pesan:
-                        RecommendFragment pesan = new RecommendFragment();
-                        fragmentTransaction.replace(R.id.frame, pesan);
+                    case R.id.rekomendasi:
+                        RecommendFragment rekomendasi = new RecommendFragment();
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.frame, rekomendasi);
+                        fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                         return true;
+                    case R.id.pesan:
+                        Toast toast = Toast.makeText(getApplicationContext(), "Comming Soon !!", Toast.LENGTH_LONG);
+                        toast.show();
+                        return true;
                     case R.id.pemberitahuan:
-                        NotifFragment fragment = new NotifFragment();
-                        fragmentTransaction.replace(R.id.frame, fragment);
+                        NotifFragment pemberitahuan = new NotifFragment();
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.frame, pemberitahuan);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                        return true;
+                    case R.id.tentang:
+                        AboutFragment tentang  = new AboutFragment();
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.frame, tentang);
+                        fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                         return true;
                 }
-                return true;
+                return false;
             }
         });
         drawer = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -77,7 +99,9 @@ public class Tentor extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ProfilFragment profil = new ProfilFragment();
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame, profil);
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 drawer.closeDrawers();
             }
