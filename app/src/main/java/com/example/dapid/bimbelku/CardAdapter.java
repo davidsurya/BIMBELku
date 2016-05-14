@@ -46,8 +46,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        ListItem list = items.get(position);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final ListItem list = items.get(position);
         holder.imageView.setImageBitmap(list.getImage());
         holder.txtNama.setText(list.getNama());
         holder.txtKeahlian.setText(list.getKeahlian());

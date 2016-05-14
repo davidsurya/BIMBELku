@@ -26,12 +26,14 @@ public class NotifFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private ConfigNotif config;
 
-    private final static String TAG_URL ="http://www.bimbelku.esy.es/api/get_pemberitahuan.php?receiver=1&tipe=0";
+    private final static String TAG_URL ="http://www.bimbelku.esy.es/api/get_pemberitahuan.php?receiver=";
     private final static String TAG_URL_IMG ="http://www.bimbelku.esy.es/foto/";
 
     private final static String TAG_BIMBELKU = "bimbelkudata";
     private final static String TAG_NIK = "nik";
     private final static String TAG_NAMA = "nama";
+
+    private String id;
 
     private JSONArray bimbelku;
     private ProgressDialog pd;
@@ -42,10 +44,13 @@ public class NotifFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Pemberitahuan");
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(false);
+        id = getArguments().getString("id");
 
         layoutManager = new LinearLayoutManager(this.getActivity());
 
         recyclerView.setLayoutManager(layoutManager);
+
+
         // Calling async task to get json
         new GetNotif().execute();
 
@@ -60,12 +65,13 @@ public class NotifFragment extends Fragment {
             pd = new ProgressDialog(getContext());
             pd.setMessage("Mengunduh pemberitahuan");
             pd.show();
+
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             WebRequest webreq = new WebRequest();
-            String jsonStr = webreq.makeWebServiceCall(TAG_URL, WebRequest.GETRequest);
+            String jsonStr = webreq.makeWebServiceCall(TAG_URL+id+"&tipe=0", WebRequest.GETRequest);
             if (jsonStr != null){
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);

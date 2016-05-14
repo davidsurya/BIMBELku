@@ -1,8 +1,13 @@
 package com.example.dapid.bimbelku;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +25,7 @@ public class SeeProfileFragment extends Fragment {
     private String tingkat;
     private String rating;
     private Bitmap images;
+    private FloatingActionButton floatingActionButton;
 
     public SeeProfileFragment() {
         // Required empty public constructor
@@ -54,11 +60,48 @@ public class SeeProfileFragment extends Fragment {
         txtRating.setText(rating);
 
         String tipe = getArguments().getString("tipe");
+        floatingActionButton = (FloatingActionButton) v.findViewById(R.id.request);
         if(tipe.equalsIgnoreCase("1")){
-            FloatingActionButton floatingActionButton;
-            floatingActionButton = (FloatingActionButton) v.findViewById(R.id.request);
             floatingActionButton.setVisibility(View.INVISIBLE);
         }
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                AlertDialog.Builder builder =
+                        new AlertDialog.Builder(v.getContext());
+                builder.setTitle("Tambah Tentor");
+                builder.setMessage("Anda akan menambah "+nama+" sebagai tentor Anda ??");
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        final ProgressDialog pg = new ProgressDialog(v.getContext());
+                        pg.setMessage("Memproses..");
+                        pg.show();
+
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                pg.dismiss();
+                                Snackbar snackbar = Snackbar.make(v.getRootView().findViewById(R.id.root), nama+" telah Anda tambahkan sebagai tentor.", Snackbar.LENGTH_LONG);
+                                floatingActionButton.setVisibility(View.INVISIBLE);
+                                snackbar.show();
+                            }}, 2500);
+
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.show();
+            }
+        });
 
         return v;
     }

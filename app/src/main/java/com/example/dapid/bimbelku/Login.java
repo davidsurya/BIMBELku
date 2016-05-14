@@ -6,12 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +21,7 @@ import org.json.JSONObject;
 import java.net.URL;
 
 public class Login extends AppCompatActivity {
+    private CoordinatorLayout coordinatorLayout;
     private TextView txtDaftar;
     private Button btnMasuk;
     private EditText txtUsername;
@@ -44,6 +46,7 @@ public class Login extends AppCompatActivity {
     private final static String TAG_TIPE = "tipe";
     private final static String TAG_FOTO = "foto";
     private final static String TAG_PASSWORD = "password";
+    private String id;
 
     private JSONArray bimbelku;
 
@@ -53,6 +56,8 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id
+                .coordinatorLayout);
 
         this.txtDaftar = (TextView) findViewById(R.id.txtDaftar);
         this.btnMasuk = (Button) findViewById(R.id.btnMasuk);
@@ -71,7 +76,13 @@ public class Login extends AppCompatActivity {
         btnMasuk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new getLogin().execute();
+                if (txtUsername.getText().toString().length() == 0 || txtPassword.getText().toString().length() == 0 ){
+                    Snackbar snackbar = Snackbar
+                            .make(coordinatorLayout, "Masukkan Username dan Password", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }else{
+                    new getLogin().execute();
+                }
             }
         });
     }
@@ -108,6 +119,7 @@ public class Login extends AppCompatActivity {
                         tipe = c.getString(TAG_TIPE);
                         password = c.getString(TAG_PASSWORD);
                         String url_img = c.getString(TAG_FOTO);
+                        id = url_img;
                         foto = getImage(TAG_URL_IMG+url_img+".jpg");
                     }
                 }catch (JSONException e) {
@@ -126,14 +138,16 @@ public class Login extends AppCompatActivity {
 
             if (temp_username.equals(username) && temp_password.equals(password)){
                 Intent intent = new Intent(Login.this, Tentor.class);
+                intent.putExtra("id", id);
                 intent.putExtra("email", username);
                 intent.putExtra("nama", nama);
                 intent.putExtra("tipe", tipe);
                 intent.putExtra("foto", foto);
                 startActivity(intent);
             }else{
-                Toast toast = Toast.makeText(getApplicationContext(), "User dan password salah !", Toast.LENGTH_LONG);
-                toast.show();
+                Snackbar snackbar = Snackbar
+                        .make(coordinatorLayout, "Maaf, username dan password salah.", Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         }
 

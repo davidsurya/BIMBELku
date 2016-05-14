@@ -9,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +27,7 @@ public class Tentor extends AppCompatActivity {
     private FragmentTransaction fragmentTransaction;
 
     private String tipe;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +38,11 @@ public class Tentor extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("BIMBELku");
 
-        String email = getIntent().getStringExtra("email");
-        String nama = getIntent().getStringExtra("nama");
+        id = getIntent().getStringExtra("id");
+        final String email = getIntent().getStringExtra("email");
+        final String nama = getIntent().getStringExtra("nama");
         this.tipe = getIntent().getStringExtra("tipe");
-        Bitmap foto = getIntent().getParcelableExtra("foto");
-        Log.d("tipe", tipe);
+        final Bitmap foto = getIntent().getParcelableExtra("foto");
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
@@ -84,7 +84,10 @@ public class Tentor extends AppCompatActivity {
                         return true;
                     case R.id.pemberitahuan:
                         NotifFragment pemberitahuan = new NotifFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", id);
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        pemberitahuan.setArguments(bundle);
                         fragmentTransaction.replace(R.id.frame, pemberitahuan);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
@@ -102,6 +105,10 @@ public class Tentor extends AppCompatActivity {
                         fragmentTransaction.replace(R.id.frame, tentang);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
+                        return true;
+                    case R.id.keluar:
+                        finish();
+                        System.exit(0);
                         return true;
                 }
                 return false;
@@ -122,11 +129,17 @@ public class Tentor extends AppCompatActivity {
         drawer.addDrawerListener(mDrawerToogle);
         mDrawerToogle.syncState();
 
-        fab = (FloatingActionButton) findViewById(R.id.editprofil);
+        fab = (FloatingActionButton) hview.findViewById(R.id.editprofil);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("foto", foto);
+                bundle.putString("email", email);
+                bundle.putString("nama", nama);
+
                 ProfilFragment profil = new ProfilFragment();
+                profil.setArguments(bundle);
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame, profil);
                 fragmentTransaction.addToBackStack(null);
